@@ -1,0 +1,14 @@
+models/dto/RoleDTO.class
+models/entities/Name.class
+models/projection/PersonRolesDTO.class
+models/entities/Address.class
+models/projection/PersonLastNameDTO.class
+models/projection/PersonGwaDTO.class
+models/entities/ContactInfo.class
+models/entities/Role.class
+models/dto/NameDTO.class
+models/dto/PersonDTO.class
+models/dto/ContactInfoDTO.class
+models/dto/AddressDTO.class
+models/entities/Person.class
+models/projection/PersonDateHiredDTO.class

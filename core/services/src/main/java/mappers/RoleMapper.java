@@ -39,8 +39,7 @@ public class RoleMapper {
 	}
 
 	public RoleDTO mapToRoleDTO(Role role){
-		RoleDTO roleDTO = new RoleDTO();
-		roleDTO = new RoleDTO(role.getRoleId(), role.getRole());
+		RoleDTO roleDTO = new RoleDTO(role.getRoleId(), role.getRole());
 
 		Set<PersonDTO> persons = new HashSet<>();
 		role.getPersons().forEach(personDTO -> persons.add(projectToPersonDTO(personDTO)));

@@ -8,8 +8,12 @@ import models.entities.*;
 import models.dto.*;
 import models.projection.*;
 
-import repository.*;
-import exception.*;
+import repository.PersonRepository;
+import repository.RoleRepository;
+import repository.ContactInfoRepository;
+
+import exception.ResourceNotFoundException;
+import exception.ResourceAlreadyExistsException;
 import mappers.PersonMapper;
 import mappers.RoleMapper;
 

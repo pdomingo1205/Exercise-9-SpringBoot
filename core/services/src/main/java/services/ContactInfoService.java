@@ -3,9 +3,8 @@ package services;
 import repository.*;
 import exception.*;
 
-import models.entities.*;
-import models.dto.*;
-import models.projection.*;
+import models.entities.ContactInfo;
+
 
 import java.util.List;
 import org.springframework.stereotype.Service;

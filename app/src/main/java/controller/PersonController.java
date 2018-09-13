@@ -8,8 +8,6 @@ import models.entities.*;
 import models.dto.*;
 import models.projection.*;
 
-import repository.*;
-import exception.*;
 import services.*;
 
 import org.springframework.http.ResponseEntity;
@@ -34,19 +32,19 @@ class PersonController {
 	}
 
 	@RequestMapping(value="/persons/lastname", method = RequestMethod.GET)
-	List<PersonLastNameDTO> getPersonsSortByLastName(
+	List<PersonLastName> getPersonsSortByLastName(
 	@RequestParam(value = "order", required = false) String order) {
 		return personService.findAllSortBy(order.toUpperCase());
 	}
 
 	@RequestMapping(value="/persons/gwa", method = RequestMethod.GET)
-	List<PersonGwaDTO> getPersonsSortByGWA(
+	List<PersonGwa> getPersonsSortByGWA(
 	            @RequestParam(value = "order", required = false) String order) {
 			return personService.findAllSortByGWA(order.toUpperCase());
 	}
 
 	@RequestMapping(value="/persons/datehired", method = RequestMethod.GET)
-	List<PersonDateHiredDTO> getPersonsSortByDateHired(
+	List<PersonDateHired> getPersonsSortByDateHired(
 	            @RequestParam(value = "order", required = false) String order) {
 			return personService.findAllSortByDateHired(order.toUpperCase());
 	}
@@ -95,7 +93,7 @@ class PersonController {
 	}
 
 	@GetMapping("/persons/{id}/roles")
-	Set<PersonRolesDTO> findRolesById(@PathVariable Long id) {
+	Set<PersonRoles> findRolesById(@PathVariable Long id) {
 		return personService.findRolesByPersonId(id);
 	}
 

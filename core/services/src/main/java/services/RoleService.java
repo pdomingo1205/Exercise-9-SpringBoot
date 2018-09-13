@@ -5,10 +5,13 @@ import java.util.Set;
 
 import models.entities.*;
 import models.dto.*;
-import models.projection.*;
-
-import repository.*;
 import exception.*;
+
+import mappers.PersonMapper;
+import mappers.RoleMapper;
+
+import repository.RoleRepository;
+import repository.PersonRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -25,30 +28,34 @@ public class RoleService {
 	@Autowired
 	private PersonRepository personRepository;
 
+	private RoleMapper roleMapper = new RoleMapper();
+	private PersonMapper personMapper = new PersonMapper();
 
-	public List<Role> findAll() {
-		return roleRepository.findAll();
+	public List<RoleDTO> findAll() {
+		return roleMapper.mapToRoleDTOList(roleRepository.findAll());
 	 }
 
-	public Role createRole(Role newRole) {
+	public RoleDTO createRole(Role newRole) {
 		if(roleRepository.existsByRole(newRole.getRole())){
 			throw new ResourceAlreadyExistsException("Role already exists with role: " + newRole);
 		}
 
-		return roleRepository.save(newRole);
+		return roleMapper.mapToRoleDTO(roleRepository.save(newRole));
 	}
 
-	public Role findById(Long id) {
-		return roleRepository.findById(id)
+	public RoleDTO findById(Long id) {
+		Role role = roleRepository.findById(id)
 				 .orElseThrow(() -> new ResourceNotFoundException("Role not found with id " + id));
+
+		return roleMapper.mapToRoleDTO(role);
 	}
 
-	public Role updateRole(Role newRole, Long id) {
+	public RoleDTO updateRole(Role newRole, Long id) {
 
 		return roleRepository.findById(id)
 			.map(role -> {
 				role.setRole(newRole.getRole());
-				return roleRepository.save(role);
+				return roleMapper.mapToRoleDTO(roleRepository.save(role));
 			})
 			 .orElseThrow(() -> new ResourceNotFoundException("Role not found with id " + id));
 	}
@@ -57,8 +64,9 @@ public class RoleService {
 		roleRepository.deleteById(id);
 	}
 
-	public List<Person> findRoleOwners(Long id){
-		return personRepository.findByRolesIn(roleRepository.findById(id).get().getPersons());
+	public List<PersonDTO> findRoleOwners(Long id){
+		System.out.println(personRepository.findByRolesIn(roleRepository.findById(id).get().getPersons()));
+		return personMapper.mapToPersonDTOList(personRepository.findByRolesIn(roleRepository.findById(id).get().getPersons()));
 	}
 
 	public ResponseEntity<?> deleteRole(Long roleId) {

@@ -6,8 +6,6 @@ import models.entities.*;
 import models.dto.*;
 import models.projection.*;
 
-import repository.*;
-import exception.*;
 import services.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +40,16 @@ class ContactController {
 	@GetMapping("/contacts")
 	List<ContactInfo> findAll() {
 		return contactService.findAll();
+	}
+
+	@DeleteMapping("/contacts/{id}")
+	void deleteById(@PathVariable Long id) {
+		contactService.deleteById(id);
+	}
+
+	@DeleteMapping("/persons/{personId}/contacts/{contactId}")
+	void deleteById(@PathVariable Long id, @PathVariable Long contactId) {
+		contactService.deleteContactInfo(id, contactId);
 	}
 
 	@GetMapping("/contacts/{id}")

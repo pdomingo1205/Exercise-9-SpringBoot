@@ -2,6 +2,7 @@ package mappers;
 
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -25,8 +26,8 @@ public class RoleMapper {
         return roles;
     }
 
-	public Set<PersonRolesDTO> createPersonRoleSetDTO(Set<Role> roles) {
-		Set<PersonRolesDTO> rolesDTO = new HashSet<>();
+	public Set<PersonRoles> createPersonRoleSetDTO(Set<Role> roles) {
+		Set<PersonRoles> rolesDTO = new HashSet<>();
 		roles.forEach(role -> rolesDTO.add(mapToPersonRolesDTO(role)));
 		return rolesDTO;
 	}
@@ -48,8 +49,8 @@ public class RoleMapper {
 		return roleDTO;
 	}
 
-	public PersonRolesDTO mapToPersonRolesDTO(Role role){
-		PersonRolesDTO personRoleDTO = new PersonRolesDTO(role.getRoleId(), role.getRole());
+	public PersonRoles mapToPersonRolesDTO(Role role){
+		PersonRoles personRoleDTO = new PersonRoles(role.getRoleId(), role.getRole());
 		return personRoleDTO;
 	}
 
@@ -62,6 +63,13 @@ public class RoleMapper {
 		roleDTO.getPersons().stream().forEach(person -> persons.add(projectToPerson(person)));
 		role.setPersons(persons);
 		return role;
+	}
+
+	public List<RoleDTO> mapToRoleDTOList(List<Role> roles){
+		List<RoleDTO> roleDTOs = new ArrayList<RoleDTO>();
+		roles.stream().forEach(role -> roleDTOs.add(mapToRoleDTO(role)));
+
+		return roleDTOs;
 	}
 
 

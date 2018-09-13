@@ -55,7 +55,7 @@ public class PersonService {
 	}
 
 
-	public List<PersonLastNameDTO> findAllSortBy(String order){
+	public List<PersonLastName> findAllSortBy(String order){
 		List<Person> persons;
 
 		if(order.equals("ASC")){
@@ -68,7 +68,7 @@ public class PersonService {
 		return personMapper.sortLastNameDTO(persons);
 	}
 
-	public List<PersonGwaDTO> findAllSortByGWA(String order){
+	public List<PersonGwa> findAllSortByGWA(String order){
 		List<Person> persons;
 
 		if(order.equals("ASC")){
@@ -81,7 +81,7 @@ public class PersonService {
 		return personMapper.sortGwaDTO(persons);
 	}
 
-	public List<PersonDateHiredDTO> findAllSortByDateHired(String order){
+	public List<PersonDateHired> findAllSortByDateHired(String order){
 		List<Person> persons;
 
 		if(order.equals("ASC")){
@@ -94,7 +94,7 @@ public class PersonService {
 		return personMapper.sortDateHiredDTO(persons);
 	}
 
-	public Set<PersonRolesDTO> findRolesByPersonId(@PathVariable Long id) {
+	public Set<PersonRoles> findRolesByPersonId(@PathVariable Long id) {
 		return roleMapper.createPersonRoleSetDTO(personRepository.findById(id).get().getRoles());
 	}
 

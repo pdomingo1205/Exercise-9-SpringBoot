@@ -2,13 +2,11 @@ package controllers;
 
 import java.util.List;
 
-import models.entities.*;
-import models.dto.*;
-import models.projection.*;
+import models.entities.Role;
+import models.dto.RoleDTO;
+import models.dto.PersonDTO;
 
-import repository.*;
-import exception.*;
-import services.*;
+import services.RoleService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,17 +27,22 @@ class RoleController {
 	}
 
 	@GetMapping("/roles")
-	List<Role> getRoles() {
+	List<RoleDTO> getRoles() {
 		return roleService.findAll();
 	}
 
+	@GetMapping("/roles/{roleId}")
+	RoleDTO getRoles(@PathVariable Long roleId) {
+		return roleService.findById(roleId);
+	}
+
 	@PostMapping("/roles")
-    public Role createRole(@RequestBody Role role) {
+    public RoleDTO createRole(@RequestBody Role role) {
         return roleService.createRole(role);
     }
 
 	@PutMapping("/roles/{id}")
-    public Role updateRole(@RequestBody Role newRole, @PathVariable Long id) {
+    public RoleDTO updateRole(@RequestBody Role newRole, @PathVariable Long id) {
         return roleService.updateRole(newRole, id);
     }
 

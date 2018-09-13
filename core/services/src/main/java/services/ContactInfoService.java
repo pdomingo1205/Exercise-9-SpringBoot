@@ -67,6 +67,14 @@ public class ContactInfoService {
 				}).orElseThrow(() -> new ResourceNotFoundException("ContactInfo not found with id " + contactInfoId));
 	}
 
+	public ResponseEntity<?> deleteById(Long contactId) {
+		return contactInfoRepository.findById(contactId)
+				.map(contact -> {
+					contactInfoRepository.delete(contact);
+					return ResponseEntity.ok().build();
+				}).orElseThrow(() -> new ResourceNotFoundException("contact not found with id " + contactId));
+	}
+
 	public ResponseEntity<?> deleteContactInfo(Long personId, Long contactInfoId) {
 		if(!personRepository.existsById(personId)) {
 			throw new ResourceNotFoundException("Person not found with id " + personId);

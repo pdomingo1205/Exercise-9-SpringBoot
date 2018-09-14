@@ -6,9 +6,14 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 
-import models.entities.*;
-import models.dto.*;
-import models.projection.*;
+import models.entities.Role;
+import models.entities.Person;
+import models.dto.RoleDTO;
+import models.dto.PersonDTO;
+import models.dto.NameDTO;
+import models.projection.PersonLastName;
+
+import models.projection.PersonRoles;
 
 
 import javax.validation.Valid;
@@ -41,8 +46,8 @@ public class RoleMapper {
 	public RoleDTO mapToRoleDTO(Role role){
 		RoleDTO roleDTO = new RoleDTO(role.getRoleId(), role.getRole());
 
-		Set<PersonDTO> persons = new HashSet<>();
-		role.getPersons().forEach(personDTO -> persons.add(projectToPersonDTO(personDTO)));
+		Set<PersonLastName> persons = new HashSet<>();
+		role.getPersons().forEach(person -> persons.add(projectToPersonLastName(person)));
 		roleDTO.setPersons(persons);
 
 		return roleDTO;
@@ -59,7 +64,9 @@ public class RoleMapper {
 		role.setRole(roleDTO.getRole());
 
 		Set<Person> persons = new HashSet<>();
-		roleDTO.getPersons().stream().forEach(person -> persons.add(projectToPerson(person)));
+		roleDTO.getPersons().stream().forEach(person ->{
+			persons.add(projectToPerson(person));
+		});
 		role.setPersons(persons);
 		return role;
 	}
@@ -72,18 +79,23 @@ public class RoleMapper {
 	}
 
 
-	private Person projectToPerson(PersonDTO personDTO) {
+	private Person projectToPerson(PersonLastName personLastName) {
 		Person person = new Person();
-		person.setId(personDTO.getPersonId());
+		person.setId(personLastName.getPersonId());
 
 		return person;
 	}
 
-	private PersonDTO projectToPersonDTO(Person person) {
-		PersonDTO personDTO = new PersonDTO();
-		personDTO.setPersonId(person.getId());
+	private PersonLastName projectToPersonLastName(Person person) {
+		PersonLastName personLastName = new PersonLastName();
+		personLastName.setPersonId(person.getId());
+		NameDTO name = new NameDTO();
+		name.setFirstName(person.getName().getFirstName());
+		name.setMiddleName(person.getName().getMiddleName());
+		name.setLastName(person.getName().getLastName());
+		personLastName.setName(name);
 
-		return personDTO;
+		return personLastName;
 	}
 
 

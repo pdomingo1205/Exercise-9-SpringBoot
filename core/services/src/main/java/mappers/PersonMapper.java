@@ -3,8 +3,15 @@ package mappers;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
-import models.entities.*;
-import models.dto.*;
+
+import models.entities.Person;
+import models.entities.Name;
+import models.entities.Address;
+
+import models.dto.PersonDTO;
+import models.dto.AddressDTO;
+import models.dto.NameDTO;
+
 import models.projection.*;
 
 import javax.validation.Valid;
@@ -15,9 +22,6 @@ public class PersonMapper {
 
 	public PersonMapper(){
 	}
-
-	public RoleMapper roleMapper = new RoleMapper();
-
 
 
 	public AddressDTO mapToAddressDTO(Address address){

@@ -1,9 +1,12 @@
 package services;
 
-import repository.*;
-import exception.*;
+import repository.ContactInfoRepository;
+import repository.PersonRepository;
+import exception.ResourceNotFoundException;
 
 import models.entities.ContactInfo;
+import models.dto.ContactInfoDTO;
+import mappers.ContactInfoMapper;
 
 
 import java.util.List;
@@ -21,30 +24,35 @@ public class ContactInfoService {
 	@Autowired
 	private PersonRepository personRepository;
 
+	private ContactInfoMapper contactMapper = new ContactInfoMapper();
 
-	public List<ContactInfo> findAll() {
-		return contactInfoRepository.findAll();
+
+	public List<ContactInfoDTO> findAll() {
+		return contactMapper.mapToContactInfoDTOList(contactInfoRepository.findAll());
 	}
 
-	public ContactInfo findById(Long contactInfoId) {
-		return contactInfoRepository.findById(contactInfoId)
-		.orElseThrow(() -> new ResourceNotFoundException("Contact not found with id " + contactInfoId));
+
+	public ContactInfoDTO findById(Long id) {
+		ContactInfo contactInfo = contactInfoRepository.findById(id)
+				 .orElseThrow(() -> new ResourceNotFoundException("Contact not found with id " + id));
+		return contactMapper.mapToContactInfoDTO(contactInfo);
 	}
 
-	public List<ContactInfo> getContactInfosByPersonId(Long personId) {
-		return contactInfoRepository.findByPersonId(personId);
+
+	public List<ContactInfoDTO> getContactInfosByPersonId(Long personId) {
+		return contactMapper.mapToContactInfoDTOList(contactInfoRepository.findByPersonId(personId));
 	}
 
-	public ContactInfo addContactInfo(Long personId, ContactInfo contactInfo) {
+	public ContactInfoDTO addContactInfo(Long personId, ContactInfoDTO contactInfoDTO) {
 		return personRepository.findById(personId)
 				.map(person -> {
-					//person.getContactInfo().add(contactInfo);
+					ContactInfo contactInfo = contactMapper.mapToContactInfo(contactInfoDTO);
 					contactInfo.setPerson(person);
-					return contactInfoRepository.save(contactInfo);
+					return contactMapper.mapToContactInfoDTO(contactInfoRepository.save(contactInfo));
 				}).orElseThrow(() -> new ResourceNotFoundException("Person not found with id " + personId));
 	}
 
-	public ContactInfo updateContactInfo(Long personId, Long contactInfoId, ContactInfo contactInfoRequest) {
+	public ContactInfoDTO updateContactInfo(Long personId, Long contactInfoId, ContactInfoDTO contactInfoRequest) {
 		if(!personRepository.existsById(personId)) {
 			throw new ResourceNotFoundException("Person not found with id " + personId);
 		}
@@ -53,16 +61,16 @@ public class ContactInfoService {
 				.map(contactInfo -> {
 					contactInfo.setContactType(contactInfoRequest.getContactType());
 					contactInfo.setContactInfo(contactInfoRequest.getContactInfo());
-					return contactInfoRepository.save(contactInfo);
+					return contactMapper.mapToContactInfoDTO(contactInfoRepository.save(contactInfo));
 				}).orElseThrow(() -> new ResourceNotFoundException("ContactInfo not found with id " + contactInfoId));
 	}
 
-	public ContactInfo updateContactInfo(Long contactInfoId, ContactInfo contactInfoRequest) {
+	public ContactInfoDTO updateContactInfo(Long contactInfoId, ContactInfoDTO contactInfoRequest) {
 		return contactInfoRepository.findById(contactInfoId)
 				.map(contactInfo -> {
 					contactInfo.setContactType(contactInfoRequest.getContactType());
 					contactInfo.setContactInfo(contactInfoRequest.getContactInfo());
-					return contactInfoRepository.save(contactInfo);
+					return contactMapper.mapToContactInfoDTO(contactInfoRepository.save(contactInfo));
 				}).orElseThrow(() -> new ResourceNotFoundException("ContactInfo not found with id " + contactInfoId));
 	}
 

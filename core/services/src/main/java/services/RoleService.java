@@ -3,9 +3,12 @@ package services;
 import java.util.List;
 import java.util.Set;
 
-import models.entities.*;
-import models.dto.*;
-import exception.*;
+import models.entities.Role;
+import models.dto.PersonDTO;
+import models.dto.RoleDTO;
+
+import exception.ResourceNotFoundException;
+import exception.ResourceAlreadyExistsException;
 
 import mappers.PersonMapper;
 import mappers.RoleMapper;
@@ -35,12 +38,12 @@ public class RoleService {
 		return roleMapper.mapToRoleDTOList(roleRepository.findAll());
 	 }
 
-	public RoleDTO createRole(Role newRole) {
+	public RoleDTO createRole(RoleDTO newRole) {
 		if(roleRepository.existsByRole(newRole.getRole())){
 			throw new ResourceAlreadyExistsException("Role already exists with role: " + newRole);
 		}
 
-		return roleMapper.mapToRoleDTO(roleRepository.save(newRole));
+		return roleMapper.mapToRoleDTO(roleRepository.save(roleMapper.mapToRole(newRole)));
 	}
 
 	public RoleDTO findById(Long id) {
@@ -50,7 +53,7 @@ public class RoleService {
 		return roleMapper.mapToRoleDTO(role);
 	}
 
-	public RoleDTO updateRole(Role newRole, Long id) {
+	public RoleDTO updateRole(RoleDTO newRole, Long id) {
 
 		return roleRepository.findById(id)
 			.map(role -> {

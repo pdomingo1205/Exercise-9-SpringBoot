@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.Date;
 
-import models.entities.*;
-import models.dto.*;
+import models.dto.PersonDTO;
+import models.dto.AddressDTO;
+import models.dto.NameDTO;
+import models.dto.RoleDTO;
+
 import models.projection.*;
 
-import services.*;
+import services.PersonService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +106,7 @@ class PersonController {
 	}
 
 	@PutMapping("/persons/{id}")
-	PersonDTO updatePerson(@RequestBody Person newPerson, @PathVariable Long id) {
+	PersonDTO updatePerson(@RequestBody PersonDTO newPerson, @PathVariable Long id) {
 		return personService.updatePerson(newPerson, id);
 	}
 

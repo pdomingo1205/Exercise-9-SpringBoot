@@ -2,7 +2,6 @@ package controllers;
 
 import java.util.List;
 
-import models.entities.Role;
 import models.dto.RoleDTO;
 import models.dto.PersonDTO;
 
@@ -37,12 +36,12 @@ class RoleController {
 	}
 
 	@PostMapping("/roles")
-    public RoleDTO createRole(@RequestBody Role role) {
+    public RoleDTO createRole(@RequestBody RoleDTO role) {
         return roleService.createRole(role);
     }
 
 	@PutMapping("/roles/{id}")
-    public RoleDTO updateRole(@RequestBody Role newRole, @PathVariable Long id) {
+    public RoleDTO updateRole(@RequestBody RoleDTO newRole, @PathVariable Long id) {
         return roleService.updateRole(newRole, id);
     }
 

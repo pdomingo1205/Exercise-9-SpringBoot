@@ -2,12 +2,13 @@ package models.dto;
 
 import java.util.Set;
 import java.util.HashSet;
+import models.projection.PersonLastName;
 
 public class RoleDTO{
 
 	private Long roleId;
 	private String role;
-	private Set<PersonDTO> persons = new HashSet<>();
+	private Set<PersonLastName> persons = new HashSet<>();
 
 	public RoleDTO(){
 
@@ -30,11 +31,11 @@ public class RoleDTO{
 		return role;
 	}
 
-	public Set<PersonDTO> getPersons(){
+	public Set<PersonLastName> getPersons(){
 		return persons;
 	}
 
-	public void setPersons(Set<PersonDTO> newPersons){
+	public void setPersons(Set<PersonLastName> newPersons){
 		this.persons = newPersons;
 	}
 

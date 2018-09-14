@@ -9,10 +9,10 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>exception</module>
         <module>models</module>
         <module>repository</module>
         <module>services</module>
-        <module>exception</module>
     </modules>
 
 </project>

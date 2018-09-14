@@ -4,14 +4,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.Date;
 
-import models.entities.*;
+import models.entities.Person;
+import models.entities.ContactInfo;
+import models.entities.Role;
+
 import models.dto.*;
 import models.projection.*;
 
 import repository.PersonRepository;
 import repository.RoleRepository;
 import repository.ContactInfoRepository;
-
 import exception.ResourceNotFoundException;
 import exception.ResourceAlreadyExistsException;
 import mappers.PersonMapper;
@@ -119,15 +121,15 @@ public class PersonService {
 	}
 
 
-	public PersonDTO updatePerson(Person newPerson, Long id) {
+	public PersonDTO updatePerson(PersonDTO newPerson, Long id) {
 
 		return personRepository.findById(id)
 			.map(person -> {
-				person.setName(newPerson.getName());
+				person.setName(personMapper.mapToName(newPerson.getName()));
 				person.setbDay(newPerson.getbDay());
 				person.setGWA(newPerson.getGWA());
 				person.setCurrEmployed(newPerson.getCurrEmployed());
-				person.setAddress(newPerson.getAddress());
+				person.setAddress(personMapper.mapToAddress(newPerson.getAddress()));
 				person.setDateHired(newPerson.getDateHired());
 				return personMapper.mapToPersonDTO(personRepository.save(person));
 			})

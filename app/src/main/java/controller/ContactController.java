@@ -2,17 +2,15 @@ package controllers;
 
 import java.util.List;
 
-import models.entities.*;
-import models.dto.*;
-import models.projection.*;
+import models.dto.ContactInfoDTO;
 
-import services.*;
+import services.ContactInfoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
-
+@RequestMapping("/home")
 @RestController
 class ContactController {
 
@@ -20,25 +18,25 @@ class ContactController {
 	private ContactInfoService contactService;
 
 	@GetMapping("/persons/{personId}/contacts")
-	public List<ContactInfo> getContactsByPersonId(@PathVariable Long personId) {
-        List<ContactInfo> contacts = contactService.getContactInfosByPersonId(personId);
+	public List<ContactInfoDTO> getContactsByPersonId(@PathVariable Long personId) {
+        List<ContactInfoDTO> contacts = contactService.getContactInfosByPersonId(personId);
         return contacts;
     }
 
 	@PostMapping("/persons/{personId}/contacts")
-    public ContactInfo createContact(@PathVariable Long personId,
-								@RequestBody ContactInfo contactInfo) {
+    public ContactInfoDTO createContact(@PathVariable Long personId,
+								@RequestBody ContactInfoDTO contactInfo) {
 
         return contactService.addContactInfo(personId, contactInfo);
     }
 
 	@PutMapping("/contacts/{id}")
-	ContactInfo updateContact(@Valid @RequestBody ContactInfo newContact, @PathVariable Long id) {
+	ContactInfoDTO updateContact(@Valid @RequestBody ContactInfoDTO newContact, @PathVariable Long id) {
 		return contactService.updateContactInfo(id, newContact);
 	}
 
 	@GetMapping("/contacts")
-	List<ContactInfo> findAll() {
+	List<ContactInfoDTO> findAll() {
 		return contactService.findAll();
 	}
 
@@ -53,7 +51,7 @@ class ContactController {
 	}
 
 	@GetMapping("/contacts/{id}")
-	ContactInfo findById(@PathVariable Long id) {
+	ContactInfoDTO findById(@PathVariable Long id) {
 		return contactService.findById(id);
 	}
 }

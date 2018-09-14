@@ -35,10 +35,5 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	 	<dependency>
-	 		<groupId>com.jpm.regsystem</groupId>
-    		<artifactId>models</artifactId>
-    		<version>0.1.0-SNAPSHOT</version>
-	 	</dependency>
 	 </dependencies>
 </project>

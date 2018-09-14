@@ -30,7 +30,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@EnableConfigurationProperties
 @TestPropertySource(locations = "classpath:application-test.properties")
 @DataJpaTest
 public class PersonRepositoryTest {

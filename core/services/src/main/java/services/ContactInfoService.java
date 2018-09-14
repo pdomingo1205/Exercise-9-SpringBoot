@@ -10,6 +10,8 @@ import mappers.ContactInfoMapper;
 
 
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,15 @@ public class ContactInfoService {
 		return personRepository.findById(personId)
 				.map(person -> {
 					ContactInfo contactInfo = contactMapper.mapToContactInfo(contactInfoDTO);
+					Set<ContactInfo> contacts;
+
+					try{
+						contacts = person.getContactInfo();
+					}catch(Exception e){
+						contacts = new HashSet<ContactInfo>();
+					}
+					contacts.add(contactInfo);
+					person.setContactInfo(contacts);
 					contactInfo.setPerson(person);
 					return contactMapper.mapToContactInfoDTO(contactInfoRepository.save(contactInfo));
 				}).orElseThrow(() -> new ResourceNotFoundException("Person not found with id " + personId));

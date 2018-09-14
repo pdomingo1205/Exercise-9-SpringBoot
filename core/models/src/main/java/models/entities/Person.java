@@ -110,6 +110,10 @@ public class Person{
 		return this.roles;
 	}
 
+	public Set<ContactInfo> getContactInfo(){
+		return contactInfo;
+	}
+
 	public void setId(Long newID){
 		this.id = newID;
 	}
@@ -140,6 +144,10 @@ public class Person{
 
 	public void setRoles(Set<Role> newRoles){
 		this.roles = newRoles;
+	}
+
+	public void setContactInfo(Set<ContactInfo> newContacts){
+		this.contactInfo = newContacts;
 	}
 
 	@Override

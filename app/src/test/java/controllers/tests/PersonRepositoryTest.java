@@ -8,6 +8,7 @@ import models.projection.PersonLastName;
 import exception.ResourceNotFoundException;
 import org.junit.runner.RunWith;
 import org.junit.Test;
+import org.junit.After;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -39,6 +40,13 @@ public class PersonRepositoryTest {
 	private TestEntityManager testEntityManager;
 	@Autowired
 	private PersonRepository personRepository;
+
+	@After
+	public void cleanUp(){
+		List<Person> persons = personRepository.findAll();
+
+		persons.stream().forEach(person -> testEntityManager.remove(person));
+	}
 
 	@Test
 	public void test_personFindById_true() {
@@ -172,6 +180,46 @@ public class PersonRepositoryTest {
 		assertNotEquals(repoPersons.get(2).getName().getLastName(), "Calabroso");
 		assertNotEquals(repoPersons.get(0).getName().getLastName(), "Fumera");
 		assertNotEquals(repoPersons.get(1).getName().getLastName(), "Villareal");
+
+	}
+
+	@Test
+	public void test_findAllByGWA_true() {
+		List<Person> persons = new ArrayList<Person>();
+		Person person = new Person();
+
+		Name name = new Name();
+
+		person = new Person();
+		name.setLastName("Villareal");
+		person.setGWA(Double.valueOf(1.75));
+		person.setName(name);
+		persons.add(person);
+		testEntityManager.persist(person);
+
+		person = new Person();
+		name = new Name();
+		name.setLastName("Calabroso");
+		person.setGWA(Double.valueOf(2.0));
+		person.setName(name);
+		persons.add(person);
+		testEntityManager.persist(person);
+
+		person = new Person();
+		name = new Name();
+		name.setLastName("Fumera");
+		person.setGWA(Double.valueOf(1.25));
+		person.setName(name);
+		persons.add(person);
+		testEntityManager.persist(person);
+
+		testEntityManager.flush();
+
+		List<Person> repoPersons = personRepository.findAllByOrderByGWAAsc();
+		System.out.println("\n\n\n" + repoPersons);
+		assertEquals(repoPersons.get(0).getName().getLastName(), "Fumera");
+		assertEquals(repoPersons.get(1).getName().getLastName(), "Villareal");
+		assertEquals(repoPersons.get(2).getName().getLastName(), "Calabroso");
 
 	}
 

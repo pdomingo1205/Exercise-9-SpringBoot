@@ -17,33 +17,42 @@ import models.projection.PersonRoles;
 
 
 import javax.validation.Valid;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RoleMapper {
 
+	private static final Logger logger = LoggerFactory.getLogger(PersonMapper.class);
 
 	public RoleMapper(){
 	}
 
 	public Set<Role> createRoleSet(Set<RoleDTO> rolesDTO) {
+		logger.info("Called createRoleSet(rolesDTO)");
+
         Set<Role> roles = new HashSet<>();
         rolesDTO.forEach(role -> roles.add(mapToRole(role)));
         return roles;
     }
 
 	public Set<PersonRoles> createPersonRoleSetDTO(Set<Role> roles) {
+		logger.info("Called createPersonRoleSetDTO(roles)");
+
 		Set<PersonRoles> rolesDTO = new HashSet<>();
 		roles.forEach(role -> rolesDTO.add(mapToPersonRolesDTO(role)));
 		return rolesDTO;
 	}
 
 	public Set<RoleDTO> createRoleSetDTO(Set<Role> roles) {
+		logger.info("Called createRoleSetDTO(roles)");
+
 		Set<RoleDTO> rolesDTO = new HashSet<>();
 		roles.forEach(role -> rolesDTO.add(mapToRoleDTO(role)));
 		return rolesDTO;
 	}
 
 	public RoleDTO mapToRoleDTO(Role role){
+		logger.info("Called mapToRoleDTO(roles)");
 		RoleDTO roleDTO = new RoleDTO(role.getRoleId(), role.getRole());
 
 		Set<PersonLastName> persons = new HashSet<>();
@@ -54,11 +63,15 @@ public class RoleMapper {
 	}
 
 	public PersonRoles mapToPersonRolesDTO(Role role){
+		logger.info("Called mapToPersonRolesDTO(role)");
+
 		PersonRoles personRoleDTO = new PersonRoles(role.getRoleId(), role.getRole());
 		return personRoleDTO;
 	}
 
 	public Role mapToRole(RoleDTO roleDTO) {
+		logger.info("Called mapToRole(roleDTO)");
+
 		Role role = new Role();
 		role.setRoleId(roleDTO.getRoleId());
 		role.setRole(roleDTO.getRole());
@@ -72,6 +85,7 @@ public class RoleMapper {
 	}
 
 	public List<RoleDTO> mapToRoleDTOList(List<Role> roles){
+		logger.info("Called mapToRoleDTOList(roles)");
 		List<RoleDTO> roleDTOs = new ArrayList<RoleDTO>();
 		roles.stream().forEach(role -> roleDTOs.add(mapToRoleDTO(role)));
 
@@ -80,6 +94,7 @@ public class RoleMapper {
 
 
 	private Person projectToPerson(PersonLastName personLastName) {
+		logger.info("Called projectToPerson(personLastName)");
 		Person person = new Person();
 		person.setId(personLastName.getPersonId());
 
@@ -87,6 +102,8 @@ public class RoleMapper {
 	}
 
 	private PersonLastName projectToPersonLastName(Person person) {
+		logger.info("Called projectToPerson(person)");
+		
 		PersonLastName personLastName = new PersonLastName();
 		personLastName.setPersonId(person.getId());
 		NameDTO name = new NameDTO();

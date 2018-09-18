@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class ContactInfoService {
@@ -28,6 +30,7 @@ public class ContactInfoService {
 
 	private ContactInfoMapper contactMapper = new ContactInfoMapper();
 
+	private static final Logger logger = LoggerFactory.getLogger(ContactInfoService.class);
 
 	public List<ContactInfoDTO> findAll() {
 		return contactMapper.mapToContactInfoDTOList(contactInfoRepository.findAll());
@@ -36,7 +39,10 @@ public class ContactInfoService {
 
 	public ContactInfoDTO findById(Long id) {
 		ContactInfo contactInfo = contactInfoRepository.findById(id)
-				 .orElseThrow(() -> new ResourceNotFoundException("Contact not found with id " + id));
+				 .orElseThrow(() ->
+					 new ResourceNotFoundException("Contact not found with id " + id));
+		logger.info(String.format("Found %s", contactInfo));
+
 		return contactMapper.mapToContactInfoDTO(contactInfo);
 	}
 
@@ -59,6 +65,8 @@ public class ContactInfoService {
 					contacts.add(contactInfo);
 					person.setContactInfo(contacts);
 					contactInfo.setPerson(person);
+
+					logger.info(String.format("Saved %s", contactInfo));
 					return contactMapper.mapToContactInfoDTO(contactInfoRepository.save(contactInfo));
 				}).orElseThrow(() -> new ResourceNotFoundException("Person not found with id " + personId));
 	}
@@ -72,6 +80,7 @@ public class ContactInfoService {
 				.map(contactInfo -> {
 					contactInfo.setContactType(contactInfoRequest.getContactType());
 					contactInfo.setContactInfo(contactInfoRequest.getContactInfo());
+					logger.info(String.format("Updated %s", contactInfo));
 					return contactMapper.mapToContactInfoDTO(contactInfoRepository.save(contactInfo));
 				}).orElseThrow(() -> new ResourceNotFoundException("ContactInfo not found with id " + contactInfoId));
 	}
@@ -81,6 +90,7 @@ public class ContactInfoService {
 				.map(contactInfo -> {
 					contactInfo.setContactType(contactInfoRequest.getContactType());
 					contactInfo.setContactInfo(contactInfoRequest.getContactInfo());
+					logger.info(String.format("Saved %s", contactInfo));
 					return contactMapper.mapToContactInfoDTO(contactInfoRepository.save(contactInfo));
 				}).orElseThrow(() -> new ResourceNotFoundException("ContactInfo not found with id " + contactInfoId));
 	}
@@ -89,6 +99,7 @@ public class ContactInfoService {
 		return contactInfoRepository.findById(contactId)
 				.map(contact -> {
 					contactInfoRepository.delete(contact);
+					logger.info(String.format("Deleted %s", contact));
 					return ResponseEntity.ok().build();
 				}).orElseThrow(() -> new ResourceNotFoundException("contact not found with id " + contactId));
 	}
@@ -101,6 +112,7 @@ public class ContactInfoService {
 		return contactInfoRepository.findById(contactInfoId)
 				.map(contactInfo -> {
 					contactInfoRepository.delete(contactInfo);
+					logger.info(String.format("deleted %s", contactInfo));
 					return ResponseEntity.ok().build();
 				}).orElseThrow(() -> new ResourceNotFoundException("ContactInfo not found with id " + contactInfoId));
 

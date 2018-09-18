@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class RoleService {
@@ -30,15 +32,18 @@ public class RoleService {
 	private RoleRepository roleRepository;
 	@Autowired
 	private PersonRepository personRepository;
+	private static final Logger logger = LoggerFactory.getLogger(PersonService.class);
 
 	private RoleMapper roleMapper = new RoleMapper();
 	private PersonMapper personMapper = new PersonMapper();
 
 	public List<RoleDTO> findAll() {
+		logger.info("Called findAll()");
 		return roleMapper.mapToRoleDTOList(roleRepository.findAll());
 	 }
 
 	public RoleDTO createRole(RoleDTO newRole) {
+		logger.info("Called createRole(newRole)");
 		if(roleRepository.existsByRole(newRole.getRole())){
 			throw new ResourceAlreadyExistsException("Role already exists with role: " + newRole);
 		}
@@ -47,6 +52,7 @@ public class RoleService {
 	}
 
 	public RoleDTO findById(Long id) {
+		logger.info("Called findById(id)");
 		Role role = roleRepository.findById(id)
 				 .orElseThrow(() -> new ResourceNotFoundException("Role not found with id " + id));
 
@@ -54,6 +60,7 @@ public class RoleService {
 	}
 
 	public RoleDTO updateRole(RoleDTO newRole, Long id) {
+		logger.info("Called updateRole(newRole, id)");
 
 		return roleRepository.findById(id)
 			.map(role -> {
@@ -64,12 +71,9 @@ public class RoleService {
 	}
 
 	public void deleteById(Long id) {
+		logger.info("Called deleteById(id)");
+		
 		roleRepository.deleteById(id);
-	}
-
-	public List<PersonDTO> findRoleOwners(Long id){
-		System.out.println(personRepository.findByRolesIn(roleRepository.findById(id).get().getPersons()));
-		return personMapper.mapToPersonDTOList(personRepository.findByRolesIn(roleRepository.findById(id).get().getPersons()));
 	}
 
 	public ResponseEntity<?> deleteRole(Long roleId) {

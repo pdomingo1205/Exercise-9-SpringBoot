@@ -11,7 +11,7 @@ import models.entities.Person;
 import models.dto.RoleDTO;
 import models.dto.PersonDTO;
 import models.dto.NameDTO;
-import models.projection.PersonLastName;
+import models.dto.PersonDTO;
 
 import models.projection.PersonRoles;
 
@@ -35,10 +35,10 @@ public class RoleMapper {
         return roles;
     }
 
-	public Set<PersonRoles> createPersonRoleSetDTO(Set<Role> roles) {
+	public Set<RoleDTO> createPersonRoleSetDTO(Set<Role> roles) {
 		logger.info("Called createPersonRoleSetDTO(roles)");
 
-		Set<PersonRoles> rolesDTO = new HashSet<>();
+		Set<RoleDTO> rolesDTO = new HashSet<>();
 		roles.forEach(role -> rolesDTO.add(mapToPersonRolesDTO(role)));
 		return rolesDTO;
 	}
@@ -55,17 +55,17 @@ public class RoleMapper {
 		logger.info("Called mapToRoleDTO(roles)");
 		RoleDTO roleDTO = new RoleDTO(role.getRoleId(), role.getRole());
 
-		Set<PersonLastName> persons = new HashSet<>();
-		role.getPersons().forEach(person -> persons.add(projectToPersonLastName(person)));
+		Set<PersonDTO> persons = new HashSet<>();
+		role.getPersons().forEach(person -> persons.add(projectToPersonDTO(person)));
 		roleDTO.setPersons(persons);
 
 		return roleDTO;
 	}
 
-	public PersonRoles mapToPersonRolesDTO(Role role){
+	public RoleDTO mapToPersonRolesDTO(Role role){
 		logger.info("Called mapToPersonRolesDTO(role)");
 
-		PersonRoles personRoleDTO = new PersonRoles(role.getRoleId(), role.getRole());
+		RoleDTO personRoleDTO = new RoleDTO(role.getRoleId(), role.getRole());
 		return personRoleDTO;
 	}
 
@@ -93,7 +93,7 @@ public class RoleMapper {
 	}
 
 
-	private Person projectToPerson(PersonLastName personLastName) {
+	private Person projectToPerson(PersonDTO personLastName) {
 		logger.info("Called projectToPerson(personLastName)");
 		Person person = new Person();
 		person.setId(personLastName.getPersonId());
@@ -101,10 +101,10 @@ public class RoleMapper {
 		return person;
 	}
 
-	private PersonLastName projectToPersonLastName(Person person) {
+	private PersonDTO projectToPersonDTO(Person person) {
 		logger.info("Called projectToPerson(person)");
-		
-		PersonLastName personLastName = new PersonLastName();
+
+		PersonDTO personLastName = new PersonDTO();
 		personLastName.setPersonId(person.getId());
 		NameDTO name = new NameDTO();
 		name.setFirstName(person.getName().getFirstName());

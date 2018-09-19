@@ -70,7 +70,7 @@ public class PersonService {
 	}
 
 
-	public List<PersonLastName> findAllSortBy(String order){
+	public List<PersonDTO> findAllSortBy(String order){
 		logger.info("Called findAllSortBy(order)");
 		List<Person> persons;
 
@@ -86,7 +86,7 @@ public class PersonService {
 		return personMapper.sortLastNameDTO(persons);
 	}
 
-	public List<PersonGwa> findAllSortByGWA(String order){
+	public List<PersonDTO> findAllSortByGWA(String order){
 		logger.info("Called findAllSortByGWA(order)");
 		List<Person> persons;
 
@@ -100,7 +100,7 @@ public class PersonService {
 		return personMapper.sortGwaDTO(persons);
 	}
 
-	public List<PersonDateHired> findAllSortByDateHired(String order){
+	public List<PersonDTO> findAllSortByDateHired(String order){
 		logger.info("Called findAllSortByDateHired(order)");
 
 		List<Person> persons;
@@ -115,7 +115,7 @@ public class PersonService {
 		return personMapper.sortDateHiredDTO(persons);
 	}
 
-	public Set<PersonRoles> findRolesByPersonId(@PathVariable Long id) {
+	public Set<RoleDTO> findRolesByPersonId(@PathVariable Long id) {
 		logger.info("Called findRolesByPersonId(id)");
 		return roleMapper.createPersonRoleSetDTO(personRepository.findById(id).get().getRoles());
 	}

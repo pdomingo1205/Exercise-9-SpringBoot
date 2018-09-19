@@ -21,22 +21,6 @@ class ContactController {
 	@Autowired
 	private ContactInfoService contactService;
 
-	@GetMapping("/persons/{personId}/contacts")
-	public List<ContactInfoDTO> getContactsByPersonId(@PathVariable Long personId) {
-		logger.info("Called getContactsByPersonId(person Id)");
-
-		List<ContactInfoDTO> contacts = contactService.getContactInfosByPersonId(personId);
-        return contacts;
-    }
-
-	@PostMapping("/persons/{personId}/contacts")
-    public ContactInfoDTO createContact(@PathVariable Long personId,
-								@RequestBody ContactInfoDTO contactInfo) {
-		logger.info("Called createContact(personId, contactInfo)");
-
-        return contactService.addContactInfo(personId, contactInfo);
-    }
-
 	@PutMapping("/contacts/{id}")
 	ContactInfoDTO updateContact(@Valid @RequestBody ContactInfoDTO newContact, @PathVariable Long id) {
 
@@ -56,13 +40,6 @@ class ContactController {
 		logger.info("Called deleteById(id)");
 
 		contactService.deleteById(id);
-	}
-
-	@DeleteMapping("/persons/{personId}/contacts/{contactId}")
-	void deleteById(@PathVariable Long id, @PathVariable Long contactId) {
-		logger.info("Called deleteById(personId, contactId)");
-
-		contactService.deleteContactInfo(id, contactId);
 	}
 
 	@GetMapping("/contacts/{id}")

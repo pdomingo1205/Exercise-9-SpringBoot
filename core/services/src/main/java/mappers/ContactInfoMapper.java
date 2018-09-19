@@ -66,7 +66,7 @@ public class ContactInfoMapper {
 		contactInfo.setContactInfoId(contactInfoDTO.getContactInfoId());
 		contactInfo.setContactInfo(contactInfoDTO.getContactInfo());
 		contactInfo.setContactType(contactInfoDTO.getContactType());
-		logger.debug(String.format("contactInfo value = %s", contactInfo));
+		//logger.debug(String.format("contactInfo value = %s", contactInfo));
 
 		return contactInfo;
 	}

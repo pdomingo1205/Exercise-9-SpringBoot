@@ -126,11 +126,11 @@ public class PersonMapper {
 		return personDTO;
 	}
 
-	public List<PersonLastName> sortLastNameDTO(List<Person> persons) {
+	public List<PersonDTO> sortLastNameDTO(List<Person> persons) {
 		logger.info("Called sortLastNameDTO(persons)");
-		List<PersonLastName> personsDTO = new ArrayList<PersonLastName>();
+		List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
 		persons.forEach(person -> {
-			PersonLastName personDTO = new PersonLastName();
+			PersonDTO personDTO = new PersonDTO();
 			personDTO.setPersonId(person.getId());
 			NameDTO name = mapToNameDTO(person.getName());
 			name.setLastName(name.getLastName().toUpperCase().toString());
@@ -144,12 +144,12 @@ public class PersonMapper {
 		return personsDTO;
 	}
 
-	public List<PersonGwa> sortGwaDTO(List<Person> persons) {
+	public List<PersonDTO> sortGwaDTO(List<Person> persons) {
 		logger.info("Called sortGwaDTO(persons)");
 
-		List<PersonGwa> personsDTO = new ArrayList<PersonGwa>();
+		List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
 		persons.forEach(person -> {
-			PersonGwa personDTO = new PersonGwa();
+			PersonDTO personDTO = new PersonDTO();
 			personDTO.setPersonId(person.getId());
 			personDTO.setName(mapToNameDTO(person.getName()));
 			personDTO.setGWA(person.getGWA());
@@ -162,12 +162,12 @@ public class PersonMapper {
 		return personsDTO;
 	}
 
-	public List<PersonDateHired> sortDateHiredDTO(List<Person> persons) {
+	public List<PersonDTO> sortDateHiredDTO(List<Person> persons) {
 		logger.info("Called sortDateHiredDTO(persons)");
 
-		List<PersonDateHired> personsDTO = new ArrayList<PersonDateHired>();
+		List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
 		persons.forEach(person -> {
-			PersonDateHired personDTO = new PersonDateHired();
+			PersonDTO personDTO = new PersonDTO();
 			personDTO.setPersonId(person.getId());
 			personDTO.setName(mapToNameDTO(person.getName()));
 			personDTO.setDateHired(person.getDateHired());

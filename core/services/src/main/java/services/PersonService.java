@@ -3,12 +3,13 @@ package services;
 import java.util.List;
 import java.util.Set;
 import java.util.Date;
-
+import java.util.stream.Collectors;
 import models.entities.Person;
 import models.entities.ContactInfo;
 import models.entities.Role;
 
 import models.dto.*;
+import models.entities.*;
 import models.projection.*;
 
 import repository.PersonRepository;
@@ -18,6 +19,11 @@ import exception.ResourceNotFoundException;
 import exception.ResourceAlreadyExistsException;
 import mappers.PersonMapper;
 import mappers.RoleMapper;
+
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
+import ma.glasnost.orika.BoundMapperFacade;
 
 import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
@@ -36,18 +42,32 @@ public class PersonService {
 	@Autowired
 	private ContactInfoRepository contactInfoRepository;
 
+	private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+
+	private BoundMapperFacade<Person, PersonDTO> pMapper =  mapperFactory.getMapperFacade(Person.class, PersonDTO.class);
+	private BoundMapperFacade<Address, AddressDTO> aMapper =  mapperFactory.getMapperFacade(Address.class, AddressDTO.class);
+	private BoundMapperFacade<ContactInfo, ContactInfoDTO> cMapper =  mapperFactory.getMapperFacade(ContactInfo.class, ContactInfoDTO.class);
+	private BoundMapperFacade<Role, RoleDTO> rMapper =  mapperFactory.getMapperFacade(Role.class, RoleDTO.class);
+
+	private MapperFacade mapperFacade = mapperFactory.getMapperFacade();
+
 	private static final Logger logger = LoggerFactory.getLogger(PersonService.class);
 	private PersonMapper personMapper = new PersonMapper();
 	private RoleMapper roleMapper = new RoleMapper();
 
 	public List<PersonDTO> findAll() {
 		logger.info("Called findAll()");
-		return personMapper.mapToPersonDTOList(personRepository.findAll());
+
+		List<PersonDTO> personsDTO = personRepository.findAll().stream()
+	 		  .map(person -> pMapper.map(person))
+			  .collect(Collectors.toList());
+
+		return personsDTO;
 	 }
 
 	public PersonDTO createPerson(PersonDTO newPerson) {
 		logger.info("Called createPerson(newPerson)");
-		return personMapper.mapToPersonDTO(personRepository.save(personMapper.mapToPerson(newPerson)));
+		return pMapper.map(personRepository.save(pMapper.mapReverse(newPerson)));
 	}
 
 	public PersonDTO findById(Long id) {
@@ -56,17 +76,19 @@ public class PersonService {
 		Person person = personRepository.findById(id)
 				 .orElseThrow(() -> new ResourceNotFoundException("Person not found with id " + id));
 
-		return personMapper.mapToPersonDTO(person);
+		return pMapper.map(person);
 	}
 
 	public List<PersonDTO> findByLastName(String lastName) {
 		logger.info("Called findByLastName(lastName)");
-		return personMapper.mapToPersonDTOList(personRepository.findAllPersonByNameLastName(lastName));
+		return personRepository.findAllPersonByNameLastName(lastName).stream()
+															.map(person -> pMapper.map(person))
+															.collect(Collectors.toList());
 	}
 
 	public NameDTO findNameById(Long id) {
 		logger.info("Called findNameById(id)");
-		return personMapper.mapToNameDTO(personRepository.findById(id).get().getName());
+		return mapperFacade.map(personRepository.findById(id).get().getName(), NameDTO.class);
 	}
 
 
@@ -83,7 +105,7 @@ public class PersonService {
 			throw new ResourceNotFoundException("Order not found order:" + order);
 		}
 
-		return personMapper.sortLastNameDTO(persons);
+		return persons.stream().map(person -> pMapper.map(person)).collect(Collectors.toList());
 	}
 
 	public List<PersonDTO> findAllSortByGWA(String order){
@@ -97,7 +119,7 @@ public class PersonService {
 		}else{
 			throw new ResourceNotFoundException("Order not found order:" + order);
 		}
-		return personMapper.sortGwaDTO(persons);
+		return persons.stream().map(person -> pMapper.map(person)).collect(Collectors.toList());
 	}
 
 	public List<PersonDTO> findAllSortByDateHired(String order){
@@ -112,17 +134,19 @@ public class PersonService {
 		}else{
 			throw new ResourceNotFoundException("Order not found order:" + order);
 		}
-		return personMapper.sortDateHiredDTO(persons);
+		return persons.stream().map(person -> pMapper.map(person)).collect(Collectors.toList());
 	}
 
 	public Set<RoleDTO> findRolesByPersonId(@PathVariable Long id) {
 		logger.info("Called findRolesByPersonId(id)");
-		return roleMapper.createPersonRoleSetDTO(personRepository.findById(id).get().getRoles());
+		return personRepository.findById(id).get().getRoles().stream()
+															.map(role -> rMapper.map(role))
+															.collect(Collectors.toSet());
 	}
 
 	public AddressDTO findAddressByPersonId(@PathVariable Long id) {
 		logger.info("Called findAddressByPersonId(id)");
-		return personMapper.mapToAddressDTO(personRepository.findById(id).get().getAddress());
+		return mapperFacade.map(personRepository.findById(id).get().getAddress(), AddressDTO.class);
 	}
 
 	public Double findGWAByPersonId(@PathVariable Long id) {
@@ -151,7 +175,7 @@ public class PersonService {
 				person.setCurrEmployed(newPerson.getCurrEmployed());
 				person.setAddress(personMapper.mapToAddress(newPerson.getAddress()));
 				person.setDateHired(newPerson.getDateHired());
-				return personMapper.mapToPersonDTO(personRepository.save(person));
+				return pMapper.map(personRepository.save(person));
 			})
 			 .orElseThrow(() -> new ResourceNotFoundException("Person not found with id " + id));
 	}
@@ -161,7 +185,7 @@ public class PersonService {
 
 		return personRepository.findById(id)
 			.map(person -> {
-				Role addRole = roleMapper.mapToRole(newRole);
+				Role addRole = rMapper.mapReverse(newRole);
 
 				if(roleRepository.existsByRole(addRole.getRole())){
 					 addRole = roleRepository.findByRole(newRole.getRole());
@@ -185,7 +209,7 @@ public class PersonService {
 				person.getRoles().add(addRole);
 				logger.trace("Person Roles after adding = " + person.getRoles());
 
-				return roleMapper.createRoleSetDTO(personRepository.save(person).getRoles());
+				return personRepository.save(person).getRoles().stream().map(role -> rMapper.map(role)).collect(Collectors.toSet());
 			})
 			 .orElseThrow(() -> new ResourceNotFoundException("Person not found with id " + id));
 	}

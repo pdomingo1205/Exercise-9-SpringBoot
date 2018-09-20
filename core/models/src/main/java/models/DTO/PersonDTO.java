@@ -6,7 +6,7 @@ import java.util.*;
 
 public class PersonDTO{
 
-	 private Long personId;
+	 private Long Id;
 	 private NameDTO name;
 	 private AddressDTO address;
 	 private Double GWA;
@@ -31,8 +31,8 @@ public class PersonDTO{
 
 	}
 
-	public Long getPersonId(){
-		return personId;
+	public Long getId(){
+		return Id;
 	}
 
 	public NameDTO getName(){
@@ -60,8 +60,8 @@ public class PersonDTO{
 	}
 
 
-	public void setPersonId(Long newID){
-		this.personId = newID;
+	public void setId(Long newID){
+		this.Id = newID;
 	}
 
 	public void setName(NameDTO newName){

@@ -8,7 +8,6 @@ public class RoleDTO{
 
 	private Long roleId;
 	private String role;
-	private Set<PersonDTO> persons = new HashSet<>();
 
 	public RoleDTO(){
 
@@ -29,14 +28,6 @@ public class RoleDTO{
 
 	public String getRole(){
 		return role;
-	}
-
-	public Set<PersonDTO> getPersons(){
-		return persons;
-	}
-
-	public void setPersons(Set<PersonDTO> newPersons){
-		this.persons = newPersons;
 	}
 
 	public void setRoleId(Long newRoleId){

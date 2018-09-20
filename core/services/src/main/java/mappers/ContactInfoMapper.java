@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 import models.entities.Person;
 import models.entities.ContactInfo;
@@ -18,9 +19,16 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
+
 public class ContactInfoMapper {
 
 	private static final Logger logger = LoggerFactory.getLogger(ContactInfoMapper.class);
+
+	private final MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+	private final MapperFacade mapperFacade = mapperFactory.getMapperFacade();
 
 	public ContactInfoMapper(){
 	}
@@ -61,21 +69,16 @@ public class ContactInfoMapper {
 
 	public ContactInfo mapToContactInfo(ContactInfoDTO contactInfoDTO) {
 		logger.info("Called mapToContactInfo(contactInfoDTO)");
-
-		ContactInfo contactInfo = new ContactInfo();
-		contactInfo.setContactInfoId(contactInfoDTO.getContactInfoId());
-		contactInfo.setContactInfo(contactInfoDTO.getContactInfo());
-		contactInfo.setContactType(contactInfoDTO.getContactType());
-		//logger.debug(String.format("contactInfo value = %s", contactInfo));
-
-		return contactInfo;
+		return mapperFacade.map(contactInfoDTO,ContactInfo.class);
 	}
 
 	public List<ContactInfoDTO> mapToContactInfoDTOList(List<ContactInfo> contactInfos){
 		logger.info("Called mapToContactInfoDTOList(contactInfos)");
 
-		List<ContactInfoDTO> contactInfoDTOs = new ArrayList<ContactInfoDTO>();
-		contactInfos.stream().forEach(contactInfo -> contactInfoDTOs.add(mapToContactInfoDTO(contactInfo)));
+		List<ContactInfoDTO> contactInfoDTOs = contactInfos.stream()
+	 			   							  .map(contact -> mapperFacade.map(contact,ContactInfoDTO.class))
+											  .collect(Collectors.toList());
+
 		logger.debug(String.format("contactInfos value = %s", contactInfos));
 
 		return contactInfoDTOs;

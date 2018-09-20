@@ -57,7 +57,7 @@ public class RoleMapper {
 
 		Set<PersonDTO> persons = new HashSet<>();
 		role.getPersons().forEach(person -> persons.add(projectToPersonDTO(person)));
-		roleDTO.setPersons(persons);
+		//roleDTO.setPersons(persons);
 
 		return roleDTO;
 	}
@@ -76,11 +76,11 @@ public class RoleMapper {
 		role.setRoleId(roleDTO.getRoleId());
 		role.setRole(roleDTO.getRole());
 
-		Set<Person> persons = new HashSet<>();
-		roleDTO.getPersons().stream().forEach(person ->{
+		//Set<Person> persons = new HashSet<>();
+		/*roleDTO.getPersons().stream().forEach(person ->{
 			persons.add(projectToPerson(person));
-		});
-		role.setPersons(persons);
+		});*/
+		//role.setPersons(persons);
 		return role;
 	}
 
@@ -96,7 +96,7 @@ public class RoleMapper {
 	private Person projectToPerson(PersonDTO personLastName) {
 		logger.info("Called projectToPerson(personLastName)");
 		Person person = new Person();
-		person.setId(personLastName.getPersonId());
+		//person.setId(personLastName.getPersonId());
 
 		return person;
 	}
@@ -105,7 +105,7 @@ public class RoleMapper {
 		logger.info("Called projectToPerson(person)");
 
 		PersonDTO personLastName = new PersonDTO();
-		personLastName.setPersonId(person.getId());
+		//personLastName.setPersonId(person.getId());
 		NameDTO name = new NameDTO();
 		name.setFirstName(person.getName().getFirstName());
 		name.setMiddleName(person.getName().getMiddleName());

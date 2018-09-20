@@ -10,6 +10,7 @@ import models.dto.AddressDTO;
 import models.dto.NameDTO;
 import models.dto.RoleDTO;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 
 import services.PersonService;
 import services.ContactInfoService;
@@ -40,6 +41,7 @@ class PersonController {
 	}
 
 	//Sorting
+
 
 	@RequestMapping(method = RequestMethod.GET)
 	ResponseEntity<?> getPersonsSortBy(
@@ -109,23 +111,24 @@ class PersonController {
 
 	//Crud Operations
 	@PostMapping("/roles")
-	Set<RoleDTO> addRoleToPerson(@PathVariable Long personId,
+	ResponseEntity<?> addRoleToPerson(@PathVariable Long personId,
 								@RequestBody RoleDTO role) {
 		logger.info("Called addRoleToPerson(personId, role)");
 
-		return personService.addRole(personId, role);
+		return new ResponseEntity<Set<RoleDTO>>(personService.addRole(personId, role), HttpStatus.OK);
 	}
 
+
 	@PostMapping
-    PersonDTO createPerson(@Valid @RequestBody PersonDTO person) {
+    ResponseEntity<?> createPerson(@Valid @RequestBody PersonDTO person) {
 		logger.info("Called createPerson(person)");
-		return personService.createPerson(person);
+		return new ResponseEntity<PersonDTO>(personService.createPerson(person), HttpStatus.OK);
     }
 
 	@PutMapping("/{id}")
-	PersonDTO updatePerson(@RequestBody PersonDTO newPerson, @PathVariable Long id) {
+	ResponseEntity<?> updatePerson(@RequestBody PersonDTO newPerson, @PathVariable Long id) {
 		logger.info("Called updatePerson(person)");
-		return personService.updatePerson(newPerson, id);
+		return new ResponseEntity<PersonDTO>(personService.updatePerson(newPerson, id), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
@@ -142,11 +145,10 @@ class PersonController {
 	}
 
 	@PostMapping("/{personId}/contacts")
-	public ContactInfoDTO addContactToPerson(@PathVariable Long personId,
+	public ResponseEntity<?> addContactToPerson(@PathVariable Long personId,
 								@RequestBody ContactInfoDTO contactInfo) {
 		logger.info("Called addContactToPerson(personId, contactInfo)");
-
-		return contactService.addContactInfo(personId, contactInfo);
+		return new ResponseEntity<ContactInfoDTO>(contactService.addContactInfo(personId, contactInfo), HttpStatus.OK);
 	}
 
 

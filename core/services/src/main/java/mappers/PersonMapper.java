@@ -95,7 +95,7 @@ public class PersonMapper {
 
 		Person person = new Person();
 
-		person.setId(personDTO.getPersonId());
+		//person.setId(personDTO.getPersonId());
 		person.setName(mapToName(personDTO.getName()));
 		person.setbDay(personDTO.getbDay());
 		person.setGWA(personDTO.getGWA());
@@ -113,7 +113,7 @@ public class PersonMapper {
 
 		PersonDTO personDTO = new PersonDTO();
 
-        personDTO.setPersonId(person.getId());
+        //personDTO.setPersonId(person.getId());
 		personDTO.setName(mapToNameDTO(person.getName()));
 		personDTO.setbDay(person.getbDay());
 		personDTO.setGWA(person.getGWA());
@@ -131,7 +131,7 @@ public class PersonMapper {
 		List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
 		persons.forEach(person -> {
 			PersonDTO personDTO = new PersonDTO();
-			personDTO.setPersonId(person.getId());
+			//personDTO.setPersonId(person.getId());
 			NameDTO name = mapToNameDTO(person.getName());
 			name.setLastName(name.getLastName().toUpperCase().toString());
 			personDTO.setName(name);
@@ -150,7 +150,7 @@ public class PersonMapper {
 		List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
 		persons.forEach(person -> {
 			PersonDTO personDTO = new PersonDTO();
-			personDTO.setPersonId(person.getId());
+			//personDTO.setPersonId(person.getId());
 			personDTO.setName(mapToNameDTO(person.getName()));
 			personDTO.setGWA(person.getGWA());
 
@@ -168,7 +168,7 @@ public class PersonMapper {
 		List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
 		persons.forEach(person -> {
 			PersonDTO personDTO = new PersonDTO();
-			personDTO.setPersonId(person.getId());
+			//personDTO.setPersonId(person.getId());
 			personDTO.setName(mapToNameDTO(person.getName()));
 			personDTO.setDateHired(person.getDateHired());
 

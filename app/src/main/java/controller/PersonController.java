@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.validation.Valid;
 
+@RequestMapping(value="/persons")
 @RestController
 class PersonController {
 
@@ -40,7 +41,7 @@ class PersonController {
 
 	//Sorting
 
-	@RequestMapping(value="/persons", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	ResponseEntity<?> getPersonsSortBy(
 		@RequestParam(value = "sortBy", defaultValue = "NONE") String sortBy,
 		@RequestParam(value = "order", defaultValue = "ASC") String order,
@@ -107,7 +108,7 @@ class PersonController {
 	}
 
 	//Crud Operations
-	@PostMapping("/persons/{personId}/roles")
+	@PostMapping("/roles")
 	Set<RoleDTO> addRoleToPerson(@PathVariable Long personId,
 								@RequestBody RoleDTO role) {
 		logger.info("Called addRoleToPerson(personId, role)");
@@ -115,32 +116,32 @@ class PersonController {
 		return personService.addRole(personId, role);
 	}
 
-	@PostMapping("/persons")
+	@PostMapping
     PersonDTO createPerson(@Valid @RequestBody PersonDTO person) {
 		logger.info("Called createPerson(person)");
 		return personService.createPerson(person);
     }
 
-	@PutMapping("/persons/{id}")
+	@PutMapping("/{id}")
 	PersonDTO updatePerson(@RequestBody PersonDTO newPerson, @PathVariable Long id) {
 		logger.info("Called updatePerson(person)");
 		return personService.updatePerson(newPerson, id);
 	}
 
-	@DeleteMapping("/persons/{id}")
+	@DeleteMapping("/{id}")
 	ResponseEntity<?> deletePerson(@PathVariable Long id) {
 		logger.info("Called deletePerson(person)");
 		return personService.deletePerson(id);
 	 }
 
-	@DeleteMapping("/persons/{personId}/contacts/{contactId}")
+	@DeleteMapping("/{personId}/contacts/{contactId}")
 	void removeContactFromPerson(@PathVariable Long id, @PathVariable Long contactId) {
 		logger.info("Called removeContactFromPerson(personId, contactId)");
 
 		contactService.deleteContactInfo(id, contactId);
 	}
 
-	@PostMapping("/persons/{personId}/contacts")
+	@PostMapping("/{personId}/contacts")
 	public ContactInfoDTO addContactToPerson(@PathVariable Long personId,
 								@RequestBody ContactInfoDTO contactInfo) {
 		logger.info("Called addContactToPerson(personId, contactInfo)");

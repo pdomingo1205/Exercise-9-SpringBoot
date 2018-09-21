@@ -17,8 +17,7 @@ import repository.RoleRepository;
 import repository.ContactInfoRepository;
 import exception.ResourceNotFoundException;
 import exception.ResourceAlreadyExistsException;
-import mappers.PersonMapper;
-import mappers.RoleMapper;
+
 
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.MapperFacade;
@@ -53,8 +52,6 @@ public class PersonService {
 	private MapperFacade mapperFacade = mapperFactory.getMapperFacade();
 
 	private static final Logger logger = LoggerFactory.getLogger(PersonService.class);
-	private PersonMapper personMapper = new PersonMapper();
-	private RoleMapper roleMapper = new RoleMapper();
 
 	@Transactional
 	public RoleDTO addRoleToAllUsers(String roleName) {
@@ -195,11 +192,11 @@ public class PersonService {
 		logger.info("Called updatePerson(newPerson, id)");
 		return personRepository.findById(id)
 			.map(person -> {
-				person.setName(personMapper.mapToName(newPerson.getName()));
+				person.setName(mapperFacade.map(newPerson.getName(), Name.class));
 				person.setbDay(newPerson.getbDay());
 				person.setGWA(newPerson.getGWA());
 				person.setCurrEmployed(newPerson.getCurrEmployed());
-				person.setAddress(personMapper.mapToAddress(newPerson.getAddress()));
+				person.setAddress(aMapper.mapReverse(newPerson.getAddress()));
 				person.setDateHired(newPerson.getDateHired());
 				return pMapper.map(personRepository.save(person));
 			})

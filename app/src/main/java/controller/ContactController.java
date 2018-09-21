@@ -25,13 +25,19 @@ class ContactController {
 	private ContactInfoService contactService;
 
 	@PutMapping("/contacts/{id}")
-	ContactInfoDTO updateContact(@Valid @RequestBody ContactInfoDTO newContact, @PathVariable Long id) {
+	ResponseEntity<?> updateContact(@Valid @RequestBody ContactInfoDTO newContact, @PathVariable Long id) {
 
 		logger.info("Called updateContact(contactInfo, id)");
-		return contactService.updateContactInfo(id, newContact);
+
+		return new ResponseEntity<ContactInfoDTO>(contactService.updateContactInfo(id, newContact), HttpStatus.OK);
 	}
 
-	@Secured("ROLE_ADMIN")
+	@GetMapping("/contacts/{id}")
+	ResponseEntity<?> findById(@PathVariable Long id) {
+		logger.info("Called createContact(id)");
+		return new ResponseEntity<ContactInfoDTO>(contactService.findById(id), HttpStatus.OK);
+	}
+
 	@GetMapping("/contacts")
 	ResponseEntity<?> findAll() {
 		logger.info("Called findAll()");
@@ -40,6 +46,7 @@ class ContactController {
 	}
 
 
+	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/contacts/{id}")
 	void deleteById(@PathVariable Long id) {
 		logger.info("Called deleteById(id)");
@@ -47,9 +54,4 @@ class ContactController {
 		contactService.deleteById(id);
 	}
 
-	@GetMapping("/contacts/{id}")
-	ContactInfoDTO findById(@PathVariable Long id) {
-		logger.info("Called createContact(id)");
-		return contactService.findById(id);
-	}
 }

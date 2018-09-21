@@ -31,27 +31,28 @@ class RoleController {
 
 
 	@GetMapping("/roles")
-	List<RoleDTO> getRoles() {
+	ResponseEntity<?> getRoles() {
 		logger.info("Called getRoles()");
-		return roleService.findAll();
+		return new ResponseEntity<List<RoleDTO>>>(roleService.findAll(), HttpStatus.OK);
 	}
 
 	@GetMapping("/roles/{roleId}")
-	RoleDTO getRoles(@PathVariable Long roleId) {
+	ResponseEntity<?> getRoles(@PathVariable Long roleId) {
 		logger.info("Called findById(roleId)");
-		return roleService.findById(roleId);
+		return new ResponseEntity<RoleDTO>(roleService.findById(roleId), HttpStatus.OK);
 	}
 
 	@PostMapping("/roles")
-    public RoleDTO createRole(@RequestBody RoleDTO role) {
+    ResponseEntity<?> createRole(@RequestBody RoleDTO role) {
 		logger.info("Called createRole(role)");
-        return roleService.createRole(role);
+
+		return ResponseEntity<RoleDTO>(roleService.createRole(role), HttpStatus.OK);
     }
 
 	@PutMapping("/roles/{id}")
-    public RoleDTO updateRole(@RequestBody RoleDTO newRole, @PathVariable Long id) {
+    ResponseEntity<?> updateRole(@RequestBody RoleDTO newRole, @PathVariable Long id) {
 		logger.info("Called updateRole(newRole, id)");
-	    return roleService.updateRole(newRole, id);
+	    return ResponseEntity<RoleDTO>(roleService.updateRole(role), HttpStatus.OK);
 	}
 
 	@Secured("ROLE_ADMIN")

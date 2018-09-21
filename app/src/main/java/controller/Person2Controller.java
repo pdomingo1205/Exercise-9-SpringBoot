@@ -3,6 +3,7 @@ package controllers;
 import java.util.List;
 import java.util.Set;
 import java.util.Date;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import models.dto.PersonDTO;
 import models.dto.ContactInfoDTO;
@@ -23,11 +24,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.validation.Valid;
 
-@RequestMapping(value="/persons")
+@RequestMapping(value="/persons-profile2")
+@ConditionalOnExpression("#{environment.getActiveProfiles()[0] == 'PROD'}")
 @RestController
-class PersonController {
+class Person2Controller {
 
-	private static final Logger logger = LoggerFactory.getLogger(PersonController.class);
+	private static final Logger logger = LoggerFactory.getLogger(Person2Controller.class);
 
 
 	private PersonService personService;
@@ -35,7 +37,7 @@ class PersonController {
 	List<PersonDTO> persons;
 	ResponseEntity<?> response;
 
-	public PersonController(PersonService newPersonService, ContactInfoService newContactService){
+	public Person2Controller(PersonService newPersonService, ContactInfoService newContactService){
 		personService = newPersonService;
 		contactService = newContactService;
 	}
@@ -138,7 +140,7 @@ class PersonController {
 		return personService.deletePerson(id);
 	 }
 
-	 @Secured("ROLE_ADMIN")
+	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/{personId}/contacts/{contactId}")
 	void removeContactFromPerson(@PathVariable Long id, @PathVariable Long contactId) {
 		logger.info("Called removeContactFromPerson(personId, contactId)");

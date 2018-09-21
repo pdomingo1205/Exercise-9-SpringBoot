@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +28,7 @@ class RoleController {
 	RoleController(RoleService roleService) {
 		this.roleService = roleService;
 	}
+
 
 	@GetMapping("/roles")
 	List<RoleDTO> getRoles() {
@@ -52,6 +54,7 @@ class RoleController {
 	    return roleService.updateRole(newRole, id);
 	}
 
+	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/roles/{id}")
 	void deleteRole(@PathVariable Long id) {
 		logger.info("Called deleteById(id)");

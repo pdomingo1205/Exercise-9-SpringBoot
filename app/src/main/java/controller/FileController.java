@@ -44,15 +44,15 @@ public class FileController {
         return fileService.parseFileToDB(file);
     }
 
-    /*
+
     @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+    public List<List<PersonDTO>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.asList(files)
                 .stream()
                 .map(file -> uploadFile(file))
                 .collect(Collectors.toList());
     }
-    */
+
 
 
 }

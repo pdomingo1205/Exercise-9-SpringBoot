@@ -25,6 +25,7 @@ import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import ma.glasnost.orika.BoundMapperFacade;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,16 @@ public class PersonService {
 	private PersonMapper personMapper = new PersonMapper();
 	private RoleMapper roleMapper = new RoleMapper();
 
+	@Transactional
+	public void addRoleToAllUsers(String roleName) {
+
+		Role role = roleRepository.findByRole(roleName);
+
+		for (Person person : personRepository.findAll()) {
+			person.getRoles().add(role);
+			personRepository.save(person);
+		}
+	}
 	public List<PersonDTO> findAll() {
 		logger.info("Called findAll()");
 

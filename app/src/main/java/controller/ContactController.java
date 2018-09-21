@@ -8,9 +8,12 @@ import services.ContactInfoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.http.ResponseEntity;
 
 
 @RestController
@@ -28,12 +31,14 @@ class ContactController {
 		return contactService.updateContactInfo(id, newContact);
 	}
 
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/contacts")
-	List<ContactInfoDTO> findAll() {
+	ResponseEntity<?> findAll() {
 		logger.info("Called findAll()");
 
-		return contactService.findAll();
+		return new ResponseEntity<List<ContactInfoDTO>>(contactService.findAll(), HttpStatus.OK);
 	}
+
 
 	@DeleteMapping("/contacts/{id}")
 	void deleteById(@PathVariable Long id) {

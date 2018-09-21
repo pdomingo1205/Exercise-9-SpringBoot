@@ -25,8 +25,10 @@ import org.slf4j.LoggerFactory;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class RoleService {
 
 	@Autowired
@@ -37,7 +39,7 @@ public class RoleService {
 
 	private static final Logger logger = LoggerFactory.getLogger(PersonService.class);
 
-
+	@Transactional(readOnly = true)
 	public List<RoleDTO> findAll() {
 		logger.info("Called findAll()");
 		return roleRepository.findAll().stream().map(role -> mapperFacade.map(role, RoleDTO.class)).collect(Collectors.toList());
@@ -52,6 +54,7 @@ public class RoleService {
 		return mapperFacade.map(roleRepository.save(mapperFacade.map(newRole,Role.class)), RoleDTO.class);
 	}
 
+	@Transactional(readOnly = true)
 	public RoleDTO findById(Long id) {
 		logger.info("Called findById(id)");
 		Role role = roleRepository.findById(id)

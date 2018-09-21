@@ -57,7 +57,7 @@ public class PersonService {
 	private RoleMapper roleMapper = new RoleMapper();
 
 	@Transactional
-	public void addRoleToAllUsers(String roleName) {
+	public RoleDTO addRoleToAllUsers(String roleName) {
 
 		Role role = roleRepository.findByRole(roleName);
 
@@ -65,7 +65,11 @@ public class PersonService {
 			person.getRoles().add(role);
 			personRepository.save(person);
 		}
+
+		return rMapper.map(role);
 	}
+
+	@Transactional(readOnly = true)
 	public List<PersonDTO> findAll() {
 		logger.info("Called findAll()");
 
@@ -76,11 +80,13 @@ public class PersonService {
 		return personsDTO;
 	 }
 
+	 @Transactional
 	public PersonDTO createPerson(PersonDTO newPerson) {
 		logger.info("Called createPerson(newPerson)");
 		return pMapper.map(personRepository.save(pMapper.mapReverse(newPerson)));
 	}
 
+	@Transactional(readOnly = true)
 	public PersonDTO findById(Long id) {
 		logger.info("Called findById(id)");
 
@@ -90,6 +96,7 @@ public class PersonService {
 		return pMapper.map(person);
 	}
 
+	@Transactional(readOnly = true)
 	public List<PersonDTO> findByLastName(String lastName) {
 		logger.info("Called findByLastName(lastName)");
 		return personRepository.findAllPersonByNameLastName(lastName).stream()
@@ -97,12 +104,13 @@ public class PersonService {
 															.collect(Collectors.toList());
 	}
 
+	@Transactional(readOnly = true)
 	public NameDTO findNameById(Long id) {
 		logger.info("Called findNameById(id)");
 		return mapperFacade.map(personRepository.findById(id).get().getName(), NameDTO.class);
 	}
 
-
+	@Transactional(readOnly = true)
 	public List<PersonDTO> findAllSortBy(String order){
 		logger.info("Called findAllSortBy(order)");
 		List<Person> persons;
@@ -119,6 +127,7 @@ public class PersonService {
 		return persons.stream().map(person -> pMapper.map(person)).collect(Collectors.toList());
 	}
 
+	@Transactional(readOnly = true)
 	public List<PersonDTO> findAllSortByGWA(String order){
 		logger.info("Called findAllSortByGWA(order)");
 		List<Person> persons;
@@ -133,6 +142,7 @@ public class PersonService {
 		return persons.stream().map(person -> pMapper.map(person)).collect(Collectors.toList());
 	}
 
+	@Transactional(readOnly = true)
 	public List<PersonDTO> findAllSortByDateHired(String order){
 		logger.info("Called findAllSortByDateHired(order)");
 
@@ -148,6 +158,7 @@ public class PersonService {
 		return persons.stream().map(person -> pMapper.map(person)).collect(Collectors.toList());
 	}
 
+	@Transactional(readOnly = true)
 	public Set<RoleDTO> findRolesByPersonId(@PathVariable Long id) {
 		logger.info("Called findRolesByPersonId(id)");
 		return personRepository.findById(id).get().getRoles().stream()
@@ -155,21 +166,25 @@ public class PersonService {
 															.collect(Collectors.toSet());
 	}
 
+	@Transactional(readOnly = true)
 	public AddressDTO findAddressByPersonId(@PathVariable Long id) {
 		logger.info("Called findAddressByPersonId(id)");
 		return mapperFacade.map(personRepository.findById(id).get().getAddress(), AddressDTO.class);
 	}
 
+	@Transactional(readOnly = true)
 	public Double findGWAByPersonId(@PathVariable Long id) {
 		logger.info("Called findGWAByPersonId(id)");
 		return personRepository.findById(id).get().getGWA();
 	}
 
+	@Transactional(readOnly = true)
 	public Date findDateHiredByPersonId(@PathVariable Long id) {
 		logger.info("Called findDateHiredByPersonId(id)");
 		return personRepository.findById(id).get().getDateHired();
 	}
 
+	@Transactional(readOnly = true)
 	public Date findBirthDayByPersonId(@PathVariable Long id) {
 		logger.info("Called findBirthDayByPersonId(id)");
 		return personRepository.findById(id).get().getbDay();
@@ -191,6 +206,7 @@ public class PersonService {
 			 .orElseThrow(() -> new ResourceNotFoundException("Person not found with id " + id));
 	}
 
+	@Transactional
 	public Set<RoleDTO> addRole(Long id, RoleDTO newRole) {
 		logger.info("Called addRole(id, newRole)");
 
@@ -225,21 +241,25 @@ public class PersonService {
 			 .orElseThrow(() -> new ResourceNotFoundException("Person not found with id " + id));
 	}
 
+	@Transactional(readOnly = true)
 	public List<ContactInfo> findPersonContacts(Long personId) {
 		logger.info("Called findPersonContacts(personId)");
 		return contactInfoRepository.findByPersonId(personId);
 	}
 
+	@Transactional(readOnly = true)
 	public Set<Role> findPersonRoles(Long personId) {
 		logger.info("Called findPersonRoles(personId)");
 		return personRepository.findById(personId).get().getRoles();
 	}
 
+	@Transactional
 	public void deleteById(Long id) {
 		logger.info("Called deleteById(Id)");
 		personRepository.deleteById(id);
 	}
 
+	@Transactional
 	public ResponseEntity<?> deletePerson(Long personId) {
 		logger.info("Called deletePerson(personId)");
 		return personRepository.findById(personId)

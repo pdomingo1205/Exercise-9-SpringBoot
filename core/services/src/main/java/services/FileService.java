@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.time.DateUtils;
-
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class FileService {
@@ -38,7 +38,7 @@ public class FileService {
 
     @Autowired
     private PersonService personService;
-    
+
     private PersonDTO personDTO;
     private NameDTO nameDTO;
     private AddressDTO addressDTO;
@@ -99,15 +99,6 @@ public class FileService {
         return persons;
     }
 
-    /*
-    @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> uploadFile(file))
-                .collect(Collectors.toList());
-    }
-    */
 
 
 }

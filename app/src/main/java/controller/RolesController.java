@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,7 @@ class RoleController {
 	@GetMapping("/roles")
 	ResponseEntity<?> getRoles() {
 		logger.info("Called getRoles()");
-		return new ResponseEntity<List<RoleDTO>>>(roleService.findAll(), HttpStatus.OK);
+		return new ResponseEntity<List<RoleDTO>>(roleService.findAll(), HttpStatus.OK);
 	}
 
 	@GetMapping("/roles/{roleId}")
@@ -46,13 +48,13 @@ class RoleController {
     ResponseEntity<?> createRole(@RequestBody RoleDTO role) {
 		logger.info("Called createRole(role)");
 
-		return ResponseEntity<RoleDTO>(roleService.createRole(role), HttpStatus.OK);
+		return new ResponseEntity<RoleDTO>(roleService.createRole(role), HttpStatus.OK);
     }
 
 	@PutMapping("/roles/{id}")
     ResponseEntity<?> updateRole(@RequestBody RoleDTO newRole, @PathVariable Long id) {
 		logger.info("Called updateRole(newRole, id)");
-	    return ResponseEntity<RoleDTO>(roleService.updateRole(role), HttpStatus.OK);
+	    return new ResponseEntity<RoleDTO>(roleService.updateRole(newRole, id), HttpStatus.OK);
 	}
 
 	@Secured("ROLE_ADMIN")

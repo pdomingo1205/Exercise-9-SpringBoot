@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.stream.Collectors;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+
 @Service
+@Transactional
 public class ContactInfoService {
 
 	@Autowired
@@ -35,13 +37,14 @@ public class ContactInfoService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ContactInfoService.class);
 
+	@Transactional(readOnly = true)
 	public List<ContactInfoDTO> findAll() {
 		return contactInfoRepository.findAll().stream()
 											.map(contact ->
 											mapperFacade.map(contact, ContactInfoDTO.class)).collect(Collectors.toList());
 	}
 
-
+	@Transactional(readOnly = true)
 	public ContactInfoDTO findById(Long id) {
 		ContactInfo contactInfo = contactInfoRepository.findById(id)
 				 .orElseThrow(() ->
@@ -51,7 +54,7 @@ public class ContactInfoService {
 		return mapperFacade.map(contactInfo, ContactInfoDTO.class);
 	}
 
-
+	@Transactional(readOnly = true)
 	public List<ContactInfoDTO> getContactInfosByPersonId(Long personId) {
 
 		return contactInfoRepository.findByPersonId(personId)

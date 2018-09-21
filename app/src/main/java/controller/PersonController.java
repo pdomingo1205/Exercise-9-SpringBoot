@@ -110,7 +110,7 @@ class PersonController {
 	}
 
 	//Crud Operations
-	@PostMapping("/roles")
+	@PostMapping("/{personId}/roles")
 	ResponseEntity<?> addRoleToPerson(@PathVariable Long personId,
 								@RequestBody RoleDTO role) {
 		logger.info("Called addRoleToPerson(personId, role)");
@@ -123,6 +123,12 @@ class PersonController {
     ResponseEntity<?> createPerson(@Valid @RequestBody PersonDTO person) {
 		logger.info("Called createPerson(person)");
 		return new ResponseEntity<PersonDTO>(personService.createPerson(person), HttpStatus.OK);
+    }
+
+	@PostMapping("/roles")
+    ResponseEntity<?> addRoleToAll(@RequestBody RoleDTO role) {
+		logger.info("Called createPerson(person)");
+		return new ResponseEntity<RoleDTO>(personService.addRoleToAllUsers(role.getRole()), HttpStatus.OK);
     }
 
 	@PutMapping("/{id}")
